@@ -22,7 +22,7 @@ export class TransactionService {
 
   saveRecords(listRecords: Transaction[]) {
     console.log(API + '/transaction/upload');
-    return this.http.post<Transaction[]>(API + '/transaction/upload/',  listRecords);
+    return this.http.post<any>(API + '/transaction/upload/',  listRecords);
   }
 
 }

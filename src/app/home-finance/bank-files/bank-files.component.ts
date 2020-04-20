@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Transaction } from '../model/transaction';
 import { TransactionService } from '../services/transaction.service';
@@ -26,7 +27,9 @@ export class BankFilesComponent implements OnInit {
 
 
   constructor(
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    private _snackBar: MatSnackBar
+    
     ) { }
 
   ngOnInit() {
@@ -129,8 +132,9 @@ export class BankFilesComponent implements OnInit {
 
   save() {
     this.transactionService.saveRecords(this.dataSource.data).subscribe(
-      res => console.log(res)
-    );
+      res  => {
+        this._snackBar.open(res.msg, 'Added', {duration: 2000})
+      });    
 
   }
 
