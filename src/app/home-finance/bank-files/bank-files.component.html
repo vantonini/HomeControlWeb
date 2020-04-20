@@ -1,52 +1,59 @@
-<p>bank-files works!</p>
-<input type="file" (change)="onFileChange($event)" />
-<div class="container">
-
+<div class="container-fluid">
+  <!-- change this to a plus icon -->
+  <div class="image-upload">
+    <label for="file-input">
+      <mat-icon class="example-icon md-36" aria-hidden="false">library_add</mat-icon>  
+    </label>
+    <input id="file-input" type="file" (change)="onFileSelected($event)"/>
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <button mat-raised-button color="accent" (click)="clear()">Clear</button>
+  </div>
+  
+  
   <!-- import Table  -->
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width:45%;float:left;margin:1px">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width:55%;float:left;margin:1px">
     <!-- Position Column -->
     <ng-container matColumnDef="Position">
       <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element?.position}} </td>
+      <td mat-cell *matCellDef="let element"> {{element?.id}} </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="Date">
       <th mat-header-cell *matHeaderCellDef> Date </th>
-      <td mat-cell *matCellDef="let element"> {{element?.date | date:'dd/MM/yy'}} </td>
+      <td mat-cell *matCellDef="let element"> {{element?.transactionDate | date:'dd/MM/yy'}} </td>
     </ng-container>
 
     <!-- Description Column -->
     <ng-container matColumnDef="Description">
       <th mat-header-cell *matHeaderCellDef> Description </th>
-      <td mat-cell *matCellDef="let element"> {{element?.establishment}} </td>
+      <td mat-cell *matCellDef="let element"> {{element?.storeOriginalName}} </td>
     </ng-container>
 
     <!-- Value Column -->
     <ng-container matColumnDef="Value">
-      <th mat-header-cell *matHeaderCellDef> Value </th>
+      <th mat-header-cell class="text-right" *matHeaderCellDef> Value </th>
       <td mat-cell class="text-right" *matCellDef="let element"> {{element?.value | number:'1.2'}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="removeRecord(row)">
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="removeRecord(row)"
+    class="example-element-row">
     </tr>
   </table>
-
-    <!-- removed Table  -->
-  <table mat-table [dataSource]="dataRemovedSource" class="mat-elevation-z8"
-    style="width:45%;float:left;margin-left:1%">
+  <!-- removed Table  -->
+  <table mat-table [dataSource]="dataRemovedSource" class="mat-elevation-z8" style="width:40%;float:left;margin-left:1%">
     <!-- Position Column -->
     <ng-container matColumnDef="Position">
       <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element?.position}} </td>
+      <td mat-cell *matCellDef="let element"> {{element?.id}} </td>
       <td mat-footer-cell *matFooterCellDef>Total</td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="Date">
       <th mat-header-cell *matHeaderCellDef> Date </th>
-      <td mat-cell *matCellDef="let element"> {{element?.date | date:'dd/MM/yy'}} </td>
+      <td mat-cell *matCellDef="let element"> {{element?.transactionDate | date:'dd/MM/yy'}} </td>
       <td mat-footer-cell *matFooterCellDef></td>
 
     </ng-container>
@@ -54,20 +61,22 @@
     <!-- Description Column -->
     <ng-container matColumnDef="Description">
       <th mat-header-cell *matHeaderCellDef> Description </th>
-      <td mat-cell *matCellDef="let element"> {{element?.establishment}} </td>
+      <td mat-cell *matCellDef="let element"> {{element?.storeOriginalName}} </td>
       <td mat-footer-cell *matFooterCellDef></td>
 
     </ng-container>
 
     <!-- Value Column -->
     <ng-container matColumnDef="Value">
-      <th mat-header-cell *matHeaderCellDef> Value </th>
+      <th mat-header-cell class="text-right" *matHeaderCellDef> Value </th>
       <td mat-cell class="text-right" *matCellDef="let element"> {{element?.value | number:'1.2'}} </td>
       <td mat-footer-cell class="text-right" *matFooterCellDef> {{ totalValueRemoved | number: '1.2'}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="restoreRecord(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="restoreRecord(row)"
+    class="example-element-row">
+    </tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
   </table>
 </div>

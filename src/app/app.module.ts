@@ -3,22 +3,26 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BankFilesComponent } from './home-finance/bank-files/bank-files.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModuleModule } from './home-finance/material-module.module';
+import { MaterialModule } from './home-finance/material.module';
+import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './home/home.component';
+import { ShoppingComponent } from './shopping/shopping.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    BankFilesComponent
+    HomeComponent,
+    ShoppingComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModuleModule
+    MaterialModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

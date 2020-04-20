@@ -1,21 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material/table';
-
-
-export interface FinancialRecord {
-  position: number;
-  date: Date;
-  value: number;
-  recordType: string;
-  establishment: string;
-}
-
-// const ELEMENT_DATA: FinancialRecord[] = [
-//   {position: 1, date: new Date('2020-04-04'), value: 1.0079, recordType: 'H', establishment: 'H'},
-//   {position: 2, date: new Date('2020-02-20'), value: 20.1797, recordType: 'He', establishment: 'Ne'},
-// ];
+import { MatTableDataSource } from '@angular/material/table';
+import { Transaction } from '../model/transaction';
+import { TransactionService } from '../services/transaction.service';
 
 @Component({
   selector: 'app-bank-files',
@@ -24,15 +12,22 @@ export interface FinancialRecord {
 })
 export class BankFilesComponent implements OnInit {
   displayedColumns: string[] = ['Position', 'Date', 'Description', 'Value'];
-  listFinancialRecords : FinancialRecord[] = [];
-  selection = new SelectionModel<FinancialRecord>(true, []);
-  dataSource = new MatTableDataSource<FinancialRecord>(this.listFinancialRecords);
+  listFinancialRecords : Transaction[] = [];
+  selection = new SelectionModel<Transaction>(true, []);
+  dataSource = new MatTableDataSource<Transaction>(this.listFinancialRecords);
 
-  dataRemovedSource = new MatTableDataSource<FinancialRecord>([]);
+  dataRemovedSource = new MatTableDataSource<Transaction>([]);
 
   totalValueRemoved = 0;
 
-  constructor() { }
+  csvFile = '';
+
+  index = 0;
+
+
+  constructor(
+    private transactionService: TransactionService
+    ) { }
 
   ngOnInit() {
   }
@@ -50,58 +45,59 @@ export class BankFilesComponent implements OnInit {
         this.dataSource.data.forEach(row => this.selection.select(row));
   }
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: FinancialRecord): string {
+  checkboxLabel(row?: Transaction): string {
     // console.log(row);
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
-  onFileChange(event) {
+
+  onFileSelected(event) {
     let reader = new FileReader();
-    this.dataSource = new MatTableDataSource<FinancialRecord>([]);
-    const [file] = event.target.files;
-    // console.log(file);
-    reader.readAsBinaryString(file);
+    reader.readAsBinaryString(event.target.files[0]);
     reader.onload = (e) => {    
       let lines = (<string>reader.result).split('\n');
-      let index = 0;
-      console.log(lines);
+      
 
       lines.forEach(element => {
         let line = element.split(',');
-        console.log(line);
         if (line.length > 1 && line.length == 5) {
           // bank statement 
-          let financialRecord: FinancialRecord = {
-            position: index,
-            date: new Date(line[0]),
+          let financialRecord: Transaction = {
+            id: this.index,
+            transactionDate: new Date(line[0]),
             value: Number.parseFloat(line[1]),
-            recordType: line[3].replace(/"/g, '').trim().toUpperCase(),
-            establishment: line[4].replace(/"/g, '').trim() 
+            transactionType: null,
+            transactionDes: line[3].replace(/"/g, '').trim().toUpperCase(),
+            storeOriginalName: line[4].replace(/"/g, '').trim() 
             ? line[4].replace(/"/g, '').trim().toUpperCase() 
-            : line[3].replace(/"/g, '').trim().toUpperCase()
+            : line[3].replace(/"/g, '').trim().toUpperCase(),
+            storeModifiedName: null,
+            category: null
           } 
           this.listFinancialRecords.push(financialRecord);
-          ++index;
+          ++this.index;
         } else if (line.length > 1 && line.length == 3) {
           // credit card files
-          let financialRecord: FinancialRecord = {
-            position: index,
-            date: new Date(line[0]),
+          let financialRecord: Transaction = {
+            id: this.index,
+            transactionDate: new Date(line[0]),
+            transactionType: null,
+            transactionDes: null,
             value: Number.parseFloat(line[2]),
-            recordType: line[1].replace(/"/g, '').trim().toUpperCase(),
-            establishment: line[1].replace(/"/g, '').trim().toUpperCase()
+            storeOriginalName: line[1].replace(/"/g, '').trim().toUpperCase(),
+            storeModifiedName: null,
+            category: null
+
           } 
           this.listFinancialRecords.push(financialRecord);
-          ++index;
+          ++this.index;
         }
 
       });
-      // console.log(this.listFinancialRecords);
-      // console.log(lines.length);
-      this.dataSource = new MatTableDataSource<FinancialRecord>(this.listFinancialRecords);
+      this.dataSource = new MatTableDataSource<Transaction>(this.listFinancialRecords);
       
     }
     
@@ -113,22 +109,39 @@ export class BankFilesComponent implements OnInit {
     this.totalValueRemoved += event.value;
 
     this.dataSource.data.splice(this.dataSource.data.findIndex(e => e == event), 1);
-    this.dataSource = new MatTableDataSource<FinancialRecord>(this.dataSource.data);
-    this.dataRemovedSource = new MatTableDataSource<FinancialRecord>(this.dataRemovedSource.data);
+    this.dataSource = new MatTableDataSource<Transaction>(this.dataSource.data);
+    this.dataRemovedSource = new MatTableDataSource<Transaction>(this.dataRemovedSource.data);
     
   }
   restoreRecord(event) {
     
     this.dataSource.data.push(event);
     // sort source array
-    this.dataSource.data = this.dataSource.data.sort((e1, e2) => e1.position - e2.position);
+    this.dataSource.data = this.dataSource.data.sort((e1, e2) => e1.transactionDate.valueOf() - e2.transactionDate.valueOf());
     
     this.totalValueRemoved -= event.value;
 
     this.dataRemovedSource.data.splice(this.dataRemovedSource.data.findIndex(e => e == event), 1);
-    this.dataSource = new MatTableDataSource<FinancialRecord>(this.dataSource.data);
-    this.dataRemovedSource = new MatTableDataSource<FinancialRecord>(this.dataRemovedSource.data);
+    this.dataSource = new MatTableDataSource<Transaction>(this.dataSource.data);
+    this.dataRemovedSource = new MatTableDataSource<Transaction>(this.dataRemovedSource.data);
     // console.log(this.dataSource.data);
+  }
+
+  save() {
+    this.transactionService.saveRecords(this.dataSource.data).subscribe(
+      res => console.log(res)
+    );
+
+  }
+
+  clear() {
+    this.dataSource = new MatTableDataSource<Transaction>([]);
+    this.dataRemovedSource = new MatTableDataSource<Transaction>([]);
+    
+    this.totalValueRemoved = 0;
+    this.index = 0;
+
+
   }
 
 }

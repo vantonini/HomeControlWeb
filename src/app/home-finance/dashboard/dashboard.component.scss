@@ -1,15 +1,8 @@
-.container {
-  width: 95%;
-}
-
-.text-right {
-  text-align: right;
-}
-
 .mat-header-cell {
   font-size: large;
 }
 
+// display only icon instead of a button
 .image-upload > input
 {
     display: none;
@@ -17,9 +10,23 @@
 
 button {
   margin-left:2%;
+}  
+
+
+// scrollable content
+.example-table-container {
+  position: relative;
+  max-height: 400px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
 }
 
 
+
+// shadows over rows
 tr.example-element-row:not(.example-expanded-row):hover {
   background: whitesmoke;
 }
@@ -27,3 +34,4 @@ tr.example-element-row:not(.example-expanded-row):hover {
 tr.example-element-row:not(.example-expanded-row):active {
   background: #efefef;
 }
+
