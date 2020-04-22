@@ -4,6 +4,8 @@ import { TransactionService } from '../services/transaction.service';
 import { Transaction } from '../model/transaction';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Category } from '../model/category';
+import { CategoryService } from '../services/category.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,19 +15,8 @@ import { MatTableDataSource } from '@angular/material/table';
 export class DashboardComponent implements OnInit {
 
   displayedColumns: string[] = ['transactionDate', 'storeOriginalName', 'category','value'];
-  listTransactions : Transaction[] = [
-    { 
-      transactionDate: new Date(),
-      storeOriginalName: 'OriginalName',
-      storeModifiedName: 'modifiedName',
-      category: null,
-      id: 0,
-      transactionDes: null,
-      transactionType: null,
-      value: 0
-    }
-  ];
-
+  listTransactions: Transaction[] = [];
+  listCategory: Category[] = [];
   subTotalDisplayed: number = 0;
   month: Date = new Date();
 
@@ -35,7 +26,8 @@ export class DashboardComponent implements OnInit {
   
 
   constructor(
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    private categoryService: CategoryService,
 
   ) {   }
 
@@ -52,6 +44,14 @@ export class DashboardComponent implements OnInit {
         this.subTotalDisplayed += e.value;
       });
     });
+
+    // get all categories
+    this.categoryService.getCategories()
+    .subscribe(categories => {
+      this.listCategory = categories
+    });
+
+
   } // end ngOnInit
 
 
@@ -59,4 +59,14 @@ export class DashboardComponent implements OnInit {
     console.log(this.dataSource);
   }
 
+  
+  change(event, transaction: Transaction) {
+    const catID = this.listCategory.find(cat => cat.categoryName === event.source.value).id;
+    transaction.categoryID = catID;
+    transaction.categoryName = event.source.value;
+    console.log(transaction);
+    
+  }
+
 }
+

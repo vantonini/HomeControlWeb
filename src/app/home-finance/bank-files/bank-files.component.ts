@@ -35,26 +35,26 @@ export class BankFilesComponent implements OnInit {
   ngOnInit() {
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
-  }
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: Transaction): string {
-    // console.log(row);
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  }
+  // /** Whether the number of selected elements matches the total number of rows. */
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.dataSource.data.length;
+  //   return numSelected === numRows;
+  // }
+  // /** Selects all rows if they are not all selected; otherwise clear selection. */
+  // masterToggle() {
+  //   this.isAllSelected() ?
+  //       this.selection.clear() :
+  //       this.dataSource.data.forEach(row => this.selection.select(row));
+  // }
+  // /** The label for the checkbox on the passed row */
+  // checkboxLabel(row?: Transaction): string {
+  //   // console.log(row);
+  //   if (!row) {
+  //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  //   }
+  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  // }
 
 
   onFileSelected(event) {
@@ -78,7 +78,8 @@ export class BankFilesComponent implements OnInit {
             ? line[4].replace(/"/g, '').trim().toUpperCase() 
             : line[3].replace(/"/g, '').trim().toUpperCase(),
             storeModifiedName: null,
-            category: null
+            categoryID: null,
+            categoryName: null
           } 
           this.listFinancialRecords.push(financialRecord);
           ++this.index;
@@ -92,7 +93,8 @@ export class BankFilesComponent implements OnInit {
             value: Number.parseFloat(line[2]),
             storeOriginalName: line[1].replace(/"/g, '').trim().toUpperCase(),
             storeModifiedName: null,
-            category: null
+            categoryID: null,
+            categoryName: null
 
           } 
           this.listFinancialRecords.push(financialRecord);

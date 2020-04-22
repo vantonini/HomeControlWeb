@@ -5,6 +5,7 @@ export interface Transaction {
     transactionDes: string;
     storeOriginalName: string;
     storeModifiedName: string;
-    category: string;
+    categoryID: number;
+    categoryName: string;
     value: number;
   }

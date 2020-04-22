@@ -14,7 +14,11 @@ export class CategoryService {
   ) { }
 
   getCategories() {
-    return this.http.get<Category[]>(API + '/category/')
+    return this.http.get<Category[]>(API + '/category/getall');
+  }
+
+  saveCategory(newCategory: Category) {
+    return this.http.post<any>(API + '/category/add', newCategory);
   }
 
 }

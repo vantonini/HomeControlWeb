@@ -2,44 +2,51 @@
 <!-- <button mat-raised-button color="accent" (click)="load()">Load</button> -->
 
 <div class="example-table-container">
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-      
-      <!-- Position Column -->
-      <!-- <ng-container matColumnDef="Position">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <!-- <ng-container matColumnDef="Position">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element?.id}} </td>
+        <td mat-cell *matCellDef="let transaction"> {{transaction?.id}} </td>
       </ng-container> -->
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="transactionDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-        <td mat-cell *matCellDef="let element"> {{element?.transactionDate | date:'dd/MM/yy'}} </td>
-      </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="transactionDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+      <td mat-cell *matCellDef="let transaction"> {{transaction?.transactionDate | date:'dd/MM/yy'}} </td>
+    </ng-container>
 
-      <!-- Description Column -->
-      <ng-container matColumnDef="storeOriginalName">
-        <th mat-header-cell *matHeaderCellDef> Description </th>
-        <td mat-cell *matCellDef="let element"> {{element?.storeOriginalName}} </td>
-      </ng-container>
+    <!-- Description Column -->
+    <ng-container matColumnDef="storeOriginalName">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let transaction"> {{transaction?.storeOriginalName}} </td>
+    </ng-container>
 
-      
-      <!-- Category Column -->
-      <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef> Category </th>
-        <td mat-cell *matCellDef="let element"> {{element?.category}} </td>
-      </ng-container>
 
-      <!-- Value Column -->
-      <ng-container matColumnDef="value">
-        <th mat-header-cell class="text-right" *matHeaderCellDef> Value </th>
-        <td mat-cell class="text-right" *matCellDef="let element"> {{element?.value | number:'1.2'}} </td>
-      </ng-container>
+    <!-- Category Column -->
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <td mat-cell *matCellDef="let transaction">
+        <mat-form-field appearance="fill">
+          <mat-select>
+            <mat-option (onSelectionChange)="change($event, transaction)" *ngFor="let cat of listCategory" [value]="cat.categoryName">
+              {{ cat.categoryName | uppercase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      class="example-element-row">
-      </tr>
-    </table>
+    <!-- Value Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell class="text-right" *matHeaderCellDef> Value </th>
+      <td mat-cell class="text-right" *matCellDef="let transaction"> {{transaction?.value | number:'1.2'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="example-element-row">
+    </tr>
+  </table>
 </div>
 
 <mat-card class="example-card">

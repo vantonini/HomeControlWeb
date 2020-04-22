@@ -10,6 +10,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card'; 
 import { MatGridListModule } from '@angular/material/grid-list'; 
 import { MatSnackBarModule } from '@angular/material/snack-bar'; 
+import { MatListModule } from '@angular/material/list'; 
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatInputModule } from '@angular/material/input'; 
+import { MatSelectModule } from '@angular/material/select'; 
 
 
 @NgModule({
@@ -23,8 +27,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     MatCardModule,
     MatGridListModule,
-    MatSnackBarModule
-
+    MatSnackBarModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule
   ],
   exports: [
     MatTableModule,
@@ -34,7 +41,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     MatCardModule,
     MatGridListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule
   ]
 })
 export class MaterialModule { }

@@ -10,6 +10,9 @@ import { TransactionService } from './services/transaction.service';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from './material.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StoreService } from './services/store.service';
+
 
 
 
@@ -25,7 +28,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     HttpClientModule,
     RouterModule,
     MaterialModule,
-    HomeFinanceRoutingModule
+    HomeFinanceRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   // exports: [
   //   BankFilesComponent,
@@ -33,7 +38,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   // ],
   providers: [
     CategoryService,
-    TransactionService
+    TransactionService,
+    StoreService
   ]
 
 })

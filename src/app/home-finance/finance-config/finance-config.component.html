@@ -1,1 +1,60 @@
-<p>finance-config works!</p>
+<p>Category List</p>
+<div class="container">
+    <form [formGroup]="catFormGroup">
+        <mat-form-field>
+          <mat-label>New Category</mat-label>
+          <input matInput formControlName="catName" placeholder="Category name">
+        </mat-form-field>
+        <button mat-raised-button color="accent"  (click)="addCat()">Add</button>
+      </form>
+    <mat-selection-list *ngIf="listCategory">
+        <mat-list-option *ngFor="let category of listCategory">
+            {{category.categoryName | uppercase }}
+        </mat-list-option>
+    </mat-selection-list>
+</div>
+
+<p>Stores List</p>
+<div class="container">
+  <button mat-raised-button color="accent"  (click)="saveStores()">Apply Changes</button>
+  <br>
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <!-- Original Name Column -->
+    <ng-container matColumnDef="storeOriginalName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Original Name </th>
+      <td mat-cell *matCellDef="let store"> {{store?.storeOriginalName | uppercase }} </td>
+    </ng-container>
+
+      <!-- Modified Name Column -->
+      <ng-container matColumnDef="storeModifiedName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Modified Name </th>
+        <td mat-cell *matCellDef="let store">
+          
+          <form [formGroup]="storeFormGroup">
+          <mat-form-field>
+          <input matInput formControlName="modifiedName" (input)="saveModifiedName($event, store)" [value]="store?.storeModifiedName">
+          </mat-form-field>
+        </form>
+
+        </td>
+      </ng-container>
+
+      <!-- Category Name Column -->
+      <ng-container matColumnDef="categoryName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+        <td mat-cell *matCellDef="let store"> 
+          <mat-select [value]="getCatName(store?.categoryID)">
+            <mat-option (onSelectionChange)="change($event, store)" *ngFor="let cat of listCategory" [value]="cat.categoryName">
+              {{ cat.categoryName | uppercase }}
+            </mat-option>
+          </mat-select>
+      </td>
+      </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="example-element-row">
+    </tr>
+  </table>
+</div>
